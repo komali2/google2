@@ -1,3 +1,5 @@
+"use strict";
+
 var api = {};
 var userStorage = {};
 var songcontroller = require('./songcontroller.js');
