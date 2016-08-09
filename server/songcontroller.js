@@ -4,12 +4,12 @@ let api = {};
 
 class Songlist {
  constructor(){
-     this.songlist = {};
+     this.list = {};
  }
 
  add(song){
-     if(this.songlist[song.title] === undefined){
-         this.songlist[song.title] = song;
+     if(this.list[song.title] === undefined){
+         this.list[song.title] = song;
      }
  }
 }
@@ -18,6 +18,11 @@ class Song{
     constructor(title, url){
         this.title = title;
         this.url = url;
+        this.timeplayed = 0;
+    }
+
+    addTime(time){
+        this.timeplayed += time;
     }
 }
 
