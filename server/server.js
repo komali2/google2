@@ -7,36 +7,14 @@ var path = require('path');
 var userRouter = express.Router();
 var userStorage = {};
 var bodyParser = require('body-parser')
+process.setMaxListeners(20);
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/user', userRouter);
-userRouter.post('/login', function(req, res){
-    if(userStorage[req.body.username]){
+require('./router.js')(app, express);
 
-    } else{
-        //make them register
-    }
-});
-userRouter.post('/register', function(req, res){
-    var username = req.body.username;
-    var password = req.body.password;
-    if(username && password && userStorage[username] === undefined){
-        userStorage[username] = {
-            username: username,
-            password: password
-        }
-        res.sendStatus(200);
-    } else{
-        res.sendStatus(500);
-    }
-});
 
-userRouter.get('/', function(req, res){
-    res.send(userStorage);
-})
 
-  app.use(express.static(path.join(__dirname, '../app')));
-  //app.use('/arena', arenaRouter);
+app.use(express.static(path.join(__dirname, '../app')));
 app.listen(port);
 
