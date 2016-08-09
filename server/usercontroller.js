@@ -1,5 +1,18 @@
 var api = {};
 var userStorage = {};
+var songcontroller = require('./songcontroller.js');
+
+var Song = songcontroller.Song;
+var Songlist = songcontroller.Songlist;
+
+class User {
+    constructor(name, password){
+        this.name = name;
+        this.password = password;
+        this.songList = {};
+    }
+
+}
 
 api.login = function(req, res){
     if(userStorage[req.body.username]){

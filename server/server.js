@@ -13,8 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 require('./router.js')(app, express);
 
-
-
 app.use(express.static(path.join(__dirname, '../app')));
 app.listen(port);
 
