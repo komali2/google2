@@ -1,13 +1,12 @@
 var userController = require('./usercontroller.js');
+var auth = require('./authcontroller.js');
 
 module.exports = function(app, express){
     var userRouter = express.Router();
-
+    var authRouter = express.Router();
+    app.use('/auth', authRouter);
     app.use('/user', userRouter);
 
-    userRouter.get('/login', userController.login);
-    userRouter.post('/register', userController.register);
-
-    userRouter.get('/song', userController.getSong);
-    userRouter.post('/songs', userController.addSong);
+    authRouter.get('/', auth.login);
+    authRouter.post('/', auth.register);
 }
