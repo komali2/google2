@@ -1,7 +1,6 @@
 function register(callback){
-    var username = $('#username').text();
-    var password = $('#password').text();
-    
+    var username = $('#username').val();
+    var password = $('#password').val();
     $.ajax({
         method: "POST",
         url: "/user/register",

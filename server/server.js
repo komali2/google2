@@ -6,6 +6,9 @@ var pg = require('pg');
 var path = require('path');
 var userRouter = express.Router();
 var userStorage = {};
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/user', userRouter);
 userRouter.post('/login', function(req, res){
@@ -16,13 +19,16 @@ userRouter.post('/login', function(req, res){
     }
 });
 userRouter.post('/register', function(req, res){
-    if(req.body.username && req.body.password && userStorage[username] === undefined){
+    var username = req.body.username;
+    var password = req.body.password;
+    if(username && password && userStorage[username] === undefined){
         userStorage[username] = {
             username: username,
             password: password
         }
+        res.sendStatus(200);
     } else{
-        res.send(500);
+        res.sendStatus(500);
     }
 });
 
