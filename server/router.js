@@ -7,4 +7,7 @@ module.exports = function(app, express){
 
     userRouter.get('/login', userController.login);
     userRouter.post('/register', userController.register);
+
+    userRouter.get('/song', userController.getSong);
+    userRouter.post('/songs', userController.addSong);
 }

@@ -1,17 +1,18 @@
 "use strict";
 
 var api = {};
-var userStorage = {};
 var songcontroller = require('./songcontroller.js');
 
 var Song = songcontroller.Song;
 var Songlist = songcontroller.Songlist;
 
+var userStorage = {};
+
 class User {
     constructor(name, password){
         this.name = name;
         this.password = password;
-        this.songList = new Songlist;
+        this.songList = new Songlist();
     }
 
 }
@@ -37,5 +38,17 @@ api.register = function(req, res){
         res.sendStatus(500);
     }
 };
+
+api.getSong = function(req, res){
+    var songTitle = req.query['song'];
+    var user = req.query['user'];
+
+}
+
+api.addSong = function(req, res){
+    var song = req.body.song;
+    var user = req.body.username;
+    userStorage[user].songList.add(song);
+}
 
 module.exports = api;
