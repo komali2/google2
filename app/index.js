@@ -22,4 +22,15 @@ $(document).ready(function(){
             console.log(msg);
         });
     });
+
+        $('#getusers').on("click", function(){
+        
+        $.ajax({
+            method: "GET",
+            url: "/user",
+            success: function(data){
+                console.log('got data', data);
+            }
+        });
+    });
 })

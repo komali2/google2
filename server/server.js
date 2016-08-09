@@ -32,6 +32,10 @@ userRouter.post('/register', function(req, res){
     }
 });
 
+userRouter.get('/', function(req, res){
+    res.send(userStorage);
+})
+
   app.use(express.static(path.join(__dirname, '../app')));
   //app.use('/arena', arenaRouter);
 app.listen(port);
