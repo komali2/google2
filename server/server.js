@@ -18,13 +18,15 @@ userRouter.post('/login', function(req, res){
 userRouter.post('/register', function(req, res){
     if(req.body.username && req.body.password && userStorage[username] === undefined){
         userStorage[username] = {
+            username: username,
             password: password
         }
     } else{
         res.send(500);
     }
 });
+
   app.use(express.static(path.join(__dirname, '../app')));
   //app.use('/arena', arenaRouter);
-
+app.listen(port);
 
