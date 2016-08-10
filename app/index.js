@@ -30,15 +30,8 @@ $(document).ready(function(){
 
     $('#submitsong').on("click", function(){
         $.ajax({
-            method: "POST",
-            url: "user/songs/",
-            data:  {
-                song: {
-                    title: 'canon',
-                    url: './canon.mp3'
-                },
-                username: user
-            },
+            method: "GET",
+            url: "/auth",
             success: function(res){
                 console.log(res);
             }
