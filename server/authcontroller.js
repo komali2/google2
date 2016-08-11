@@ -1,5 +1,6 @@
 var api = {};
 
+
 api.login = function(req, res){
     var sess = req.session;
     if(sess.views){
