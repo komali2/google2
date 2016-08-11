@@ -70,17 +70,19 @@ api.register = function(req, res){
 
 function createUser(username, password, cb){
     pool.connect().then((client)=>{
-        console.log('username is', username, 'password is', password);
-        client.query(`INSERT INTO USERS 
-            (name, password)
-            values('${username}', '${password}')`)
-        .then((res)=>{
-            console.log('response from register was', res);
-            cb();
-        })
-        .catch((err)=>{
-            console.log('got into connect');
-            console.log('err in register', err);
+        bcrypt.hash(password, null, null, (err, hash)=>{
+
+            client.query(`INSERT INTO USERS 
+                (name, password)
+                values('${username}', '${hash}')`)
+            .then((res)=>{
+                console.log('response from register was', res);
+                cb();
+            })
+            .catch((err)=>{
+                console.log('got into connect');
+                console.log('err in register', err);
+            })
         })
     })
 }

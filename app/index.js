@@ -15,8 +15,8 @@ function register(callback){
 }
 
 function login(){
-    var username = 'testtest2';
-    var password = 'testtestpass2';
+    var username = $('#username').val();
+    var password = $('#password').val();
     $.ajax({
         method: "POST",
         url: "/auth/login",
