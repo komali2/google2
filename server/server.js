@@ -80,7 +80,7 @@ app.use(session({
     cookie: {secure: false}
 }));
 
-require('./router.js')(app, express);
+require('./router.js')(app, express, pool);
 
 app.use(express.static(path.join(__dirname, '../app')));
 
