@@ -25,14 +25,37 @@ const config = {
 var pool = new Pool(config);
 
 pool.connect().then((client)=>{
-    client.query('SELECT * FROM test2').then((res)=>{
+    
+    client.query('CREATE TABLE IF NOT EXISTS users(users_id serial primary key, name TEXT, password TEXT)').then((res)=>{
         client.release();
-        console.log("hello from", res.rows[0]);
+       
     })
     .catch(e =>{
         client.release();
         console.error('query error', e.message, e.stack);
     })
+});
+
+pool.connect().then((client)=>{
+    client.query("INSERT INTO users (name, password) values('testtest2', 'testtestpass2')").then((res)=>{
+        client.release();
+    })
+    .catch(e =>{
+        client.release();
+        console.error('query error', e.message, e.stack);
+    })
+})
+
+pool.connect().then((client)=>{
+    client.query('SELECT * from users').then((res)=>{
+        console.log('heres what we got', res, res.rows);
+        client.release();
+    })
+    .catch(e =>{
+        client.release();
+        console.error('query error', e.message, e.stack);
+    })
+
 })
 
 pool.on('error', function(e, client) {
@@ -41,15 +64,6 @@ pool.on('error', function(e, client) {
   // the pool will catch the error & let you handle it here
   console.log('error in pool', error);
 });
-
-// pool.query('SELECT * FROM test2').then(function(err, result){
-//     if(err) throw err;
-//     console.log('this is result', err, 'and result', result);
-// }).catch((err)=>{
-//     //console.log('err in promise', err);
-// });
-
-
 
 // client.connect((err)=>{
 //     if(err) throw err;
