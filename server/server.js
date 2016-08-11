@@ -8,14 +8,26 @@ var session = require('express-session');
 var pg = require('pg');
 
 var connectstring = process.env.DATABASE_URL;
+console.log(connectstring);
 var client = new pg.Client(connectstring);
-
 client.connect((err)=>{
     if(err) throw err;
-
-    client.end((err)=>{
-        if(err) throw err;
+    
+    client.query('CREATE TABLE IF NOT EXISTS test2(ID INT PRIMARY KEY, NAME TEXT)').then(function(){
+        client.query("INSERT INTO test2 VALUES (1, 'hello')", function(err){
+            if(err) throw err;
+        });
+        client.query('SELECT * FROM test2', function(err, result){
+            if(err) throw err;
+            console.log('this is result', result);
+        })
+    }).catch(function(err){
+        console.log(err);
     });
+
+    // client.end((err)=>{
+    //     if(err) throw err;
+    // });
 })
 
 process.setMaxListeners(20);
