@@ -40,18 +40,17 @@ function comparePass(username, attemptedPass, cb){
 
 api.login = function(req, res){
     var sess = req.session;
-    if(req.body.username){
+    if(req.body.username && req.body.password){
         comparePass(req.body.username, req.body.password, (isMatch)=>{
             if(isMatch){
-                res.status(201).send('you are logged in!');
+                res.status(200).send('you are logged in!');
             }else{
-                res.status(500).send('wrong login!');
+                res.status(401).send('wrong login!');
             }
         });
     }
     else{
-        sess.views = 1;
-        res.status(201).send('welcome! Refresh');
+        res.status(400).send('you must include a username and password');
     }
    
 }
@@ -62,7 +61,7 @@ api.register = function(req, res){
             res.status(code).send(message);
         })
     }else{
-        res.status(500).send('something went wrong in register');
+        res.status(401).send('something went wrong in register');
     }
 }
 
@@ -76,7 +75,7 @@ function createUser(username, password, cb){
                         values('${username}', '${hash}')`)
                     .then((res)=>{
                         client.release();
-                        cb(200, 'User created!');
+                        cb(201, 'User created!');
                     })
                     .catch((err)=>{
                         client.release();
@@ -84,7 +83,7 @@ function createUser(username, password, cb){
                     })
                 })
             }else{
-                cb(500, 'User Already Exists');
+                cb(401, 'User Already Exists');
             }
         })
        
