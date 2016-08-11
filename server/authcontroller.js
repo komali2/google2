@@ -26,11 +26,9 @@ function comparePass(username, attemptedPass, cb){
         .then((res)=>{
             client.release();
             let storedPass = res.rows[0]['password'];
-            console.log('attempted pass', attemptedPass);
-            console.log('stored pass', storedPass);
+
 
             bcrypt.compare(attemptedPass, storedPass, (err, isMatch)=>{
-                console.log("isMatch is", isMatch);
                 cb(isMatch);
             });
         })
@@ -55,13 +53,13 @@ api.login = function(req, res){
         sess.views = 1;
         res.status(201).send('welcome! Refresh');
     }
-    // res.status(201).send('unimplemented');
+   
 }
 
 api.register = function(req, res){
     if(req.body.username && req.body.password){
-        createUser(req.body.username, req.body.password, ()=>{
-            res.status(201).send('Registered!');
+        createUser(req.body.username, req.body.password, (code, message)=>{
+            res.status(code).send(message);
         })
     }else{
         res.status(500).send('something went wrong in register');
@@ -70,19 +68,43 @@ api.register = function(req, res){
 
 function createUser(username, password, cb){
     pool.connect().then((client)=>{
-        bcrypt.hash(password, null, null, (err, hash)=>{
+        checkUser(username, (alreadyExist)=>{
+            if(!alreadyExist){
+                bcrypt.hash(password, null, null, (err, hash)=>{
+                    client.query(`INSERT INTO USERS 
+                        (name, password)
+                        values('${username}', '${hash}')`)
+                    .then((res)=>{
+                        client.release();
+                        cb(200, 'User created!');
+                    })
+                    .catch((err)=>{
+                        client.release();
+                        console.log('err in register', err);
+                    })
+                })
+            }else{
+                cb(500, 'User Already Exists');
+            }
+        })
+       
+    })
+}
 
-            client.query(`INSERT INTO USERS 
-                (name, password)
-                values('${username}', '${hash}')`)
-            .then((res)=>{
-                console.log('response from register was', res);
-                cb();
-            })
-            .catch((err)=>{
-                console.log('got into connect');
-                console.log('err in register', err);
-            })
+function checkUser(username, cb){
+    pool.connect().then((client)=>{
+        client.query(`SELECT name FROM users WHERE name = '${username}'`)
+        .then((res)=>{
+            if(res.rows[0]){
+                cb(true);
+            }else{
+                cb(false);
+            }
+            client.release();
+        })
+        .catch((err)=>{
+            client.release();
+            console.log('err in checkUser', err);
         })
     })
 }
