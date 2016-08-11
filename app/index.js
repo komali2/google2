@@ -6,12 +6,25 @@ function register(callback){
     var password = $('#password').val();
     $.ajax({
         method: "POST",
-        url: "/user/register",
+        url: "/auth/register",
         data: { username: username, password: password },
         success: callback
     });
 
     user = username;
+}
+
+function login(){
+    var username = 'testtest2';
+    var password = 'testtestpass2';
+    $.ajax({
+        method: "POST",
+        url: "/auth/login",
+        data: {username: username, password: password},
+        success: function(res){
+            console.log('we got back', res);
+        }
+    })
 }
 
 
@@ -23,19 +36,13 @@ $(document).ready(function(){
     $('#submit').on("click", function(){
         console.log('clicked');
         register(function( msg ) {
-            console.log(msg);
+            console.log('register return was', msg);
             
         });
     });
 
     $('#submitsong').on("click", function(){
-        $.ajax({
-            method: "GET",
-            url: "/auth",
-            success: function(res){
-                console.log(res);
-            }
-        });
+        login();
     });
 
       

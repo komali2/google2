@@ -7,6 +7,6 @@ module.exports = function(app, express, pool){
     app.use('/auth', authRouter);
     app.use('/user', userRouter);
 
-    authRouter.get('/', auth.login);
-    authRouter.post('/', auth.register);
+    authRouter.post('/login', auth.login);
+    authRouter.post('/register', auth.register);
 }
