@@ -1,7 +1,7 @@
 var userController = require('./usercontroller.js');
 var auth = require('./authcontroller.js');
 
-module.exports = function(app, express){
+module.exports = function(app, express, pool){
     var userRouter = express.Router();
     var authRouter = express.Router();
     app.use('/auth', authRouter);
