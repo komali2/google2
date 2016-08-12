@@ -65,6 +65,18 @@ api.register = function(req, res){
     }
 }
 
+api.authenticate = function(req, callback){
+    if(req.session){
+        let username = req.session.username;
+        let password = req.session.password;
+        comparePass(username, password, (isMatch)=>{
+            callback(isMatch);
+        });
+    }else{
+        callback(false);
+    }
+}
+
 function createUser(username, password, cb){
     pool.connect().then((client)=>{
         checkUser(username, (alreadyExist)=>{
