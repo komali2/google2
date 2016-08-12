@@ -14,5 +14,9 @@ class User {
     }
 }
 
+api.checkCookies = function(req, res){
+    console.log("username is", req.session.username);
+    console.log('password is', req.session.password);
+}
 
-module.exports = User;
+module.exports = api;

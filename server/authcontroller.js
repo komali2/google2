@@ -29,7 +29,7 @@ function comparePass(username, attemptedPass, cb){
 
 
             bcrypt.compare(attemptedPass, storedPass, (err, isMatch)=>{
-                cb(isMatch);
+                cb(isMatch, storedPass);
             });
         })
         .catch((err)=>{
@@ -41,9 +41,13 @@ function comparePass(username, attemptedPass, cb){
 api.login = function(req, res){
     var sess = req.session;
     if(req.body.username && req.body.password){
-        comparePass(req.body.username, req.body.password, (isMatch)=>{
+        comparePass(req.body.username, req.body.password, (isMatch, storedPass)=>{
             if(isMatch){
-                res.status(200).send('you are logged in!');
+                req.session.regenerate(()=>{
+                    req.session.username = req.body.username;
+                    req.session.password = storedPass;
+                    res.status(200).send('you are logged in!');
+                })
             }else{
                 res.status(401).send('wrong login!');
             }
@@ -65,15 +69,19 @@ api.register = function(req, res){
     }
 }
 
-api.authenticate = function(req, callback){
+api.authenticate = function(req, res, next){
     if(req.session){
         let username = req.session.username;
         let password = req.session.password;
         comparePass(username, password, (isMatch)=>{
-            callback(isMatch);
+            if(isMatch){
+                next();
+            }else{
+                res.redirect('/index.html');
+            }
         });
     }else{
-        callback(false);
+        res.redirect('./index.html');
     }
 }
 

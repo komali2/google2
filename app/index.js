@@ -27,6 +27,16 @@ function login(){
     })
 }
 
+function checkCookies(){
+    $.ajax({
+        method: 'GET',
+        url: '/user',
+        success: function(res){
+            console.log('we got back', res);
+        }
+    })
+}
+
 
 
 console.log('hello');
@@ -43,6 +53,10 @@ $(document).ready(function(){
 
     $('#submitsong').on("click", function(){
         login();
+    });
+
+    $('#check').on("click", function(){
+        checkCookies();
     });
 
       
